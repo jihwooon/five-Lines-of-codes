@@ -112,13 +112,7 @@ function update() {
   }
 }
 
-function draw() {
-  const canvas = document.getElementById('GameCanvas') as HTMLCanvasElement;
-  const g = canvas.getContext('2d');
-
-  g.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Draw map
+function drawMap(g: CanvasRenderingContext2D) {
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[y].length; x++) {
       if (map[y][x] === Tile.FLUX) {
@@ -140,10 +134,29 @@ function draw() {
       }
     }
   }
+}
 
-  // Draw player
+function drawPlayer(g: CanvasRenderingContext2D) {
   g.fillStyle = '#ff0000';
   g.fillRect(playerx * TILE_SIZE, playery * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+}
+
+function createGraphics() {
+  const canvas = document.getElementById('GameCanvas') as HTMLCanvasElement;
+  const g = canvas.getContext('2d');
+
+  g.clearRect(0, 0, canvas.width, canvas.height);
+  return g;
+}
+
+function draw() {
+  const g = createGraphics();
+
+  // Draw map
+  drawMap(g);
+
+  // Draw player
+  drawPlayer(g);
 }
 
 function gameLoop() {
