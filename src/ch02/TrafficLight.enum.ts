@@ -1,4 +1,4 @@
-export enum TrafficLight {
+export enum RawTrafficLight {
     RED,
     YELLOW,
     GREEN

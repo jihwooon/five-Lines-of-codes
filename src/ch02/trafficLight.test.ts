@@ -1,4 +1,50 @@
-import { TrafficLight } from './TrafficLight.enum';
+interface TrafficLight {
+  isRed(): boolean;
+  isGreen(): boolean;
+  isYellow(): boolean;
+}
+
+class Red implements TrafficLight {
+  isRed(): boolean {
+    return true;
+  }
+
+  isGreen(): boolean {
+    return false;
+  }
+
+  isYellow(): boolean {
+    return false;
+  }
+}
+
+class Green implements TrafficLight {
+  isRed(): boolean {
+    return false;
+  }
+
+  isGreen(): boolean {
+    return true;
+  }
+
+  isYellow(): boolean {
+    return false;
+  }
+}
+
+class Yellow implements TrafficLight {
+  isRed(): boolean {
+    return false;
+  }
+
+  isGreen(): boolean {
+    return false;
+  }
+
+  isYellow(): boolean {
+    return true;
+  }
+}
 
 class Car {
   stop(): boolean {
@@ -10,12 +56,12 @@ class Car {
   }
 }
 
-const CYCLE = [TrafficLight.RED, TrafficLight.YELLOW, TrafficLight.GREEN];
+const CYCLE = [new Red(), new Yellow(), new Green()];
 
-const updateCarForLight = (current: TrafficLight) => {
+const updateCarForLight = (trafficLight: TrafficLight) => {
   const car = new Car();
 
-  if (current === TrafficLight.RED) {
+  if (trafficLight.isRed()) {
     return car.stop();
   }
   return car.drive();
