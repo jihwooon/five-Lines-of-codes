@@ -2,7 +2,7 @@ const TILE_SIZE = 30;
 const FPS = 30;
 const SLEEP = 1000 / FPS;
 
-enum rawTile {
+enum RawTile {
   AIR,
   FLUX,
   UNBREAKABLE,
@@ -410,7 +410,7 @@ class Down implements Input {
 
 let playerx = 1;
 let playery = 1;
-const rawMap: rawTile[][] = [
+const rawMap: RawTile[][] = [
   [2, 2, 2, 2, 2, 2, 2, 2],
   [2, 3, 0, 1, 1, 2, 0, 2],
   [2, 4, 2, 6, 1, 2, 0, 2],
@@ -418,8 +418,38 @@ const rawMap: rawTile[][] = [
   [2, 4, 1, 1, 1, 9, 0, 2],
   [2, 2, 2, 2, 2, 2, 2, 2],
 ];
+const assertExhausted = (x: never): never => {
+  throw new Error(`Unexpected object: ${x}`);
+};
 
 let map: Tile2[][];
+const transformTile = (tile: RawTile) => {
+  switch (tile) {
+  case RawTile.AIR: return new Air();
+  case RawTile.PLAYER: return new Play();
+  case RawTile.UNBREAKABLE: return new UnBreakable();
+  case RawTile.STONE: return new Stone();
+  case RawTile.FALLING_STONE: return new FallingStone();
+  case RawTile.BOX: return new Box();
+  case RawTile.FALLING_BOX: return new FallingBox();
+  case RawTile.FLUX: return new Flux();
+  case RawTile.KEY1: return new Key1();
+  case RawTile.LOCK1: return new Lock1();
+  case RawTile.KEY2: return new Key2();
+  case RawTile.LOCK2: return new Lock2();
+  default: assertExhausted(tile);
+  }
+};
+
+const transformMap = () => {
+  map = new Array(rawMap.length);
+  for (let y = 0; y < rawMap.length; y++) {
+    map[y] = new Array(rawMap[y].length);
+    for (let x = 0; x < rawMap[y].length; x++) {
+      map[y][x] = transformTile(rawMap[y][x]);
+    }
+  }
+};
 
 const inputs: Input[] = [];
 
@@ -580,6 +610,7 @@ function gameLoop() {
 }
 
 window.onload = () => {
+  transformMap();
   gameLoop();
 };
 
