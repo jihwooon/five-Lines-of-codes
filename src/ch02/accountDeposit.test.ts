@@ -4,14 +4,17 @@ const context = describe;
 
 const deposit = (to: string, amount: number) => {
   const { id } = db.account.find((v) => v.owner === to);
-  const accountIndex = db.account[id - 1];
+  const accountId = db.account[id - 1];
 
-  return accountIndex.amount + amount;
+  return accountId.amount + amount;
 };
 
 const transfer = (from: string, to: string, amount: number) => {
-  const fromAccount = deposit(from, -amount);
-  const toAccount = deposit(to, amount);
+  const fromAccountId = db.account.find((v) => v.owner === from).id;
+  const fromAccount = db.account[fromAccountId - 1].amount - amount;
+
+  const toAccountId = db.account.find((v) => v.owner === to).id;
+  const toAccount = db.account[toAccountId - 1].amount + amount;
 
   return `${from}님 잔액은 ${fromAccount}이고 ${to}님 잔액은 ${toAccount} 입니다.`;
 };
