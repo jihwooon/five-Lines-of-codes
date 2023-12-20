@@ -1,24 +1,9 @@
 import { TrafficLight, Red, Yellow, Green } from './TrafficLight.enum';
 
-class Car {
-  stop(): boolean {
-    return false;
-  }
-
-  drive(): boolean {
-    return true;
-  }
-}
-
 const CYCLE = [new Red(), new Green(), new Yellow()];
 
 const updateCarForLight = (current: TrafficLight) => {
-  const car = new Car();
-
-  if (current.isRed()) {
-    return car.stop();
-  }
-  return car.drive();
+  current.updateCar();
 };
 
 describe('trafficLight', () => {
