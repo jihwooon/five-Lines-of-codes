@@ -167,14 +167,10 @@ function updateMap() {
   }
 }
 
-function handleInput(input: Input) {
-  input.handle();
-}
-
 function handleInputs() {
   while (inputs.length > 0) {
-    const current = inputs.pop();
-    handleInput(current);
+    const input = inputs.pop();
+    input.handle();
   }
 }
 
