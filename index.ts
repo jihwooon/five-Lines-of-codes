@@ -17,29 +17,34 @@ enum RawInput {
   UP, DOWN, LEFT, RIGHT
 }
 interface Input {
+  handle(): void,
   isRight() : boolean,
   isLeft() : boolean,
   isUp() : boolean,
   isDown() : boolean
 }
 class Right implements Input {
+  handle(){moveHorizontal(1);}
   isRight() {return true}
   isLeft() {return false}
   isUp() {return false}
   isDown() {return false}
 }
 class Left implements Input {
+  handle(){moveHorizontal(-1);}
   isRight() {return false}
   isLeft() {return true}
   isUp() {return false}
   isDown() {return false}
 }
 class Up implements Input {
+  handle(){moveVertical(-1);}
   isRight() {return false}
   isLeft() {return false}
   isUp() {return true}
   isDown() {return false}
 }class Down implements Input {
+  handle(){moveVertical(1);}
   isRight() {return false}
   isLeft() {return false}
   isUp() {return false}
@@ -118,15 +123,7 @@ function handleInputs(){
   }
 }
 function handleInput(input:Input){
-  if (input.isLeft()) {
-    moveHorizontal(-1);
-  } else if (input.isRight()) {
-    moveHorizontal(1);
-  } else if (input.isUp()) {
-    moveVertical(-1);
-  } else if (input.isDown()) {
-    moveVertical(1);
-  }
+  input.handle();
 }
 function updateMap(){
   for (let y = map.length - 1; y >= 0; y--) {
