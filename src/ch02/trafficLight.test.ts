@@ -1,4 +1,4 @@
-import { TrafficLight } from './TrafficLight.enum';
+import { TrafficLight, Red, Yellow, Green } from './TrafficLight.enum';
 
 class Car {
   stop(): boolean {
@@ -10,12 +10,12 @@ class Car {
   }
 }
 
-const CYCLE = [TrafficLight.RED, TrafficLight.YELLOW, TrafficLight.GREEN];
+const CYCLE = [new Red(), new Green(), new Yellow()];
 
 const updateCarForLight = (current: TrafficLight) => {
   const car = new Car();
 
-  if (current === TrafficLight.RED) {
+  if (current.isRed()) {
     return car.stop();
   }
   return car.drive();
