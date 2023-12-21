@@ -403,9 +403,6 @@ function drawMap(g: CanvasRenderingContext2D){
     }
   }
 }
-function colorOfTile2(g: CanvasRenderingContext2D, x: number, y: number){
-  map[y][x].color(g);
-}
 
 function drawPlayer(g: CanvasRenderingContext2D){
     // Draw player
