@@ -8,8 +8,15 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', 'jest'],
-  extends: ['airbnb', 'plugin:@typescript-eslint/recommended', 'plugin:jest/recommended'],
+  plugins: [
+    '@typescript-eslint',
+    'jest',
+  ],
+  extends: [
+    'airbnb',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:jest/recommended',
+  ],
   root: true,
 
   settings: {
@@ -50,14 +57,10 @@ module.exports = {
     'no-empty-function': 'off',
     'max-classes-per-file': 'off',
     'no-cond-assign': 'off',
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        js: 'never',
-        ts: 'never',
-      },
-    ],
+    'import/extensions': ['error', 'ignorePackages', {
+      js: 'never',
+      ts: 'never',
+    }],
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

@@ -18,8 +18,6 @@ const reportPrimes = (n: number) => {
   }
 };
 
-const reportIfPrime = (i: number) => {
-  console.log(`${i} is prime`);
-}
+const reportIfPrime = (i: number) => console.log(`${i} is prime`);
 
 console.log(reportPrimes(5)); // 결과값 : 2,3
