@@ -14,15 +14,21 @@ enum RawTile {
 }
 interface FallingState{
   isFalling(): boolean;
-  isResting(): boolean;
+  moveHorizontal(tile: Tile, dx: number): void;
 }
 class Falling implements FallingState{
   isFalling(){return true};
-  isResting(){return false};
+  moveHorizontal(tile: Tile, dx: number){};
 }
 class Resting implements FallingState{
   isFalling(){return false};
-  isResting(){return true};
+  moveHorizontal(tile: Tile, dx: number){
+      if(map[playery][playerx + dx + dx].isAir()
+      && !map[playery + 1][playerx + dx].isAir()){
+        map[playery][playerx + dx + dx] = tile;
+        moveToTile(playerx + dx, playery);
+      }
+    };
 }
 interface Tile{
   isFlux(): boolean;
@@ -103,15 +109,7 @@ class Stone implements Tile{
   };
   isEdible(){return false};
   isPushable(){return true};
-  moveHorizontal(dx: number) {
-    if(this.isFallingStone() === false){
-      if(map[playery][playerx + dx + dx].isAir()
-      && !map[playery + 1][playerx + dx].isAir()){
-        map[playery][playerx + dx + dx] = this;
-        moveToTile(playerx + dx, playery);
-      }
-    }
-  }
+  moveHorizontal(dx: number) {this.falling.moveHorizontal(this, dx)};
   isStony(){return true;};
   isBoxy(){return false;};
 }
