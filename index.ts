@@ -15,12 +15,9 @@ enum RawTile {
 interface Tile{
   isFlux(): boolean;
   isUnbreakable(): boolean;
-  isStone(): boolean;
   isAir(): boolean;
   isPlayer(): boolean;
-  isStone(): boolean;
   isFallingStone(): boolean;
-  isBox(): boolean;
   isFallingBox(): boolean;
   isKey1(): boolean;
   isLock1(): boolean;
@@ -31,15 +28,15 @@ interface Tile{
   isEdible(): boolean;
   isPushable(): boolean;
   moveHorizontal(dx: number): void;
+  isStony(): boolean;
+  isBoxy(): boolean;
 }
 class Flux implements Tile{
   isFlux(){return true};
   isUnbreakable(){return false};
-  isStone(){return false};
   isAir(){return false};
   isPlayer(){return false};
   isFallingStone(){return false};
-  isBox(){return false};
   isFallingBox(){return false};
   isKey1(){return false};
   isLock1(){return false};
@@ -50,15 +47,15 @@ class Flux implements Tile{
   isEdible(){return true};
   isPushable(){return false};
   moveHorizontal(dx: number) {moveToTile(playerx+dx, playery)};
+  isStony(){return false;};
+  isBoxy(){return false;};
 }
 class Unbreakable implements Tile{
   isFlux(){return false};
   isUnbreakable(){return true};
-  isStone(){return false};
   isAir(){return false};
   isPlayer(){return false};
   isFallingStone(){return false};
-  isBox(){return false};
   isFallingBox(){return false};
   isKey1(){return false};
   isLock1(){return false};
@@ -72,15 +69,15 @@ class Unbreakable implements Tile{
   isEdible(){return false};
   isPushable(){return false};
   moveHorizontal(dx: number) {};
+  isStony(){return false;};
+  isBoxy(){return false;};
 }
 class Stone implements Tile{
   isFlux(){return false};
   isUnbreakable(){return false};
-  isStone(){return true};
   isAir(){return false};
   isPlayer(){return false};
   isFallingStone(){return false};
-  isBox(){return false};
   isFallingBox(){return false};
   isKey1(){return false};
   isLock1(){return false};
@@ -100,15 +97,15 @@ class Stone implements Tile{
         moveToTile(playerx + dx, playery);
     }
   }
+  isStony(){return true;};
+  isBoxy(){return false;};
 }
 class Air implements Tile{
   isFlux(){return false};
   isUnbreakable(){return false};
-  isStone(){return false};
   isAir(){return true};
   isPlayer(){return false};
   isFallingStone(){return false};
-  isBox(){return false};
   isFallingBox(){return false};
   isKey1(){return false};
   isLock1(){return false};
@@ -119,15 +116,15 @@ class Air implements Tile{
   isEdible(){return true};
   isPushable(){return false};
   moveHorizontal(dx: number) {moveToTile(playerx+dx, playery)};
+  isStony(){return false;};
+  isBoxy(){return false;};
 }
 class Player implements Tile{
   isFlux(){return false};
   isUnbreakable(){return false};
-  isStone(){return false};
   isAir(){return false};
   isPlayer(){return true};
   isFallingStone(){return false};
-  isBox(){return false};
   isFallingBox(){return false};
   isKey1(){return false};
   isLock1(){return false};
@@ -141,15 +138,15 @@ class Player implements Tile{
   isEdible(){return false};
   isPushable(){return false};
   moveHorizontal(dx: number) {};
+  isStony(){return false;};
+  isBoxy(){return false;};
 }
 class FallingStone implements Tile{
   isFlux(){return false};
   isUnbreakable(){return false};
-  isStone(){return false};
   isAir(){return false};
   isPlayer(){return false};
   isFallingStone(){return true};
-  isBox(){return false};
   isFallingBox(){return false};
   isKey1(){return false};
   isLock1(){return false};
@@ -169,15 +166,15 @@ class FallingStone implements Tile{
         moveToTile(playerx + dx, playery);
     }
   }
+  isStony(){return false;};
+  isBoxy(){return false;};
 }
 class Box implements Tile{
   isFlux(){return false};
   isUnbreakable(){return false};
-  isStone(){return false};
   isAir(){return false};
   isPlayer(){return false};
   isFallingStone(){return false};
-  isBox(){return true};
   isFallingBox(){return false};
   isKey1(){return false};
   isLock1(){return false};
@@ -197,15 +194,15 @@ class Box implements Tile{
         moveToTile(playerx + dx, playery);
     }
   }
+  isStony(){return false;};
+  isBoxy(){return true;};
 }
 class FallingBox implements Tile{
   isFlux(){return false};
   isUnbreakable(){return false};
-  isStone(){return false};
   isAir(){return false};
   isPlayer(){return false};
   isFallingStone(){return false};
-  isBox(){return false};
   isFallingBox(){return true};
   isKey1(){return false};
   isLock1(){return false};
@@ -225,15 +222,15 @@ class FallingBox implements Tile{
         moveToTile(playerx + dx, playery);
     }
   }
+  isStony(){return false;};
+  isBoxy(){return true;};
 }
 class Key1 implements Tile{
   isFlux(){return false};
   isUnbreakable(){return false};
-  isStone(){return false};
   isAir(){return false};
   isPlayer(){return false};
   isFallingStone(){return false};
-  isBox(){return false};
   isFallingBox(){return false};
   isKey1(){return true};
   isLock1(){return false};
@@ -250,15 +247,15 @@ class Key1 implements Tile{
     removeLock1();
     moveToTile(playerx + dx, playery);
   };
+  isStony(){return false;};
+  isBoxy(){return false;};
 }
 class Lock1 implements Tile{
   isFlux(){return false};
   isUnbreakable(){return false};
-  isStone(){return false};
   isAir(){return false};
   isPlayer(){return false};
   isFallingStone(){return false};
-  isBox(){return false};
   isFallingBox(){return false};
   isKey1(){return false};
   isLock1(){return true};
@@ -272,15 +269,15 @@ class Lock1 implements Tile{
   isEdible(){return false};
   isPushable(){return false};
   moveHorizontal(dx: number) {};
+  isStony(){return false;};
+  isBoxy(){return false;};
 }
 class Key2 implements Tile{
   isFlux(){return false};
   isUnbreakable(){return false};
-  isStone(){return false};
   isAir(){return false};
   isPlayer(){return false};
   isFallingStone(){return false};
-  isBox(){return false};
   isFallingBox(){return false};
   isKey1(){return false};
   isLock1(){return false};
@@ -297,15 +294,15 @@ class Key2 implements Tile{
     removeLock1();
     moveToTile(playerx + dx, playery);
   };
+  isStony(){return false;};
+  isBoxy(){return false;};
 }
 class Lock2 implements Tile{
   isFlux(){return false};
   isUnbreakable(){return false};
-  isStone(){return false};
   isAir(){return false};
   isPlayer(){return false};
   isFallingStone(){return false};
-  isBox(){return false};
   isFallingBox(){return false};
   isKey1(){return false};
   isLock1(){return false};
@@ -319,6 +316,8 @@ class Lock2 implements Tile{
   isEdible(){return false};
   isPushable(){return false};
   moveHorizontal(dx: number) {};
+  isStony(){return false;};
+  isBoxy(){return false;};
 }
 enum RawInput {
   UP, DOWN, LEFT, RIGHT
@@ -463,11 +462,11 @@ function updateMap(){
   }
 }
 function updateTile(x: number, y: number){
-  if ((map[y][x].isStone() || map[y][x].isFallingStone())
+  if ((map[y][x].isStony())
   && map[y + 1][x].isAir()) {
   map[y + 1][x] = new FallingStone();
   map[y][x] = new Air();
-} else if ((map[y][x].isBox() || map[y][x].isFallingBox())
+} else if ((map[y][x].isBoxy())
   && map[y + 1][x].isAir()) {
   map[y + 1][x] = new FallingBox();
   map[y][x] = new Air();
