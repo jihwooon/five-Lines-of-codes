@@ -27,10 +27,9 @@ interface Tile {
   isLock2(): boolean;
   draw(g: CanvasRenderingContext2D, x: number, y: number): void;
   moveHorizontal(dx: number): void;
-  isStony(): boolean;
-  isBoxy(): boolean;
   drop(): void;
   rest(): void;
+  canFall(): boolean;
 }
 
 class Flux implements Tile {
@@ -80,6 +79,10 @@ class Flux implements Tile {
   drop() { }
 
   rest() { }
+
+  canFall() {
+    return false;
+  }
 }
 
 class Air implements Tile {
@@ -122,6 +125,10 @@ class Air implements Tile {
   drop() { }
 
   rest() { }
+
+  canFall() {
+    return false;
+  }
 }
 class UnBreakable implements Tile {
   isFlux(): boolean { return false; }
@@ -155,17 +162,13 @@ class UnBreakable implements Tile {
 
   }
 
-  isStony(): boolean {
-    return false;
-  }
-
-  isBoxy(): boolean {
-    return false;
-  }
-
   drop() { }
 
   rest() { }
+
+  canFall() {
+    return false;
+  }
 }
 
 class Play implements Tile {
@@ -206,6 +209,10 @@ class Play implements Tile {
   drop() { }
 
   rest() { }
+
+  canFall() {
+    return false;
+  }
 }
 
 interface FallingState {
@@ -271,20 +278,16 @@ class Stone implements Tile {
     this.falling.moveHorizontal(this, dx);
   }
 
-  isStony(): boolean {
-    return true;
-  }
-
-  isBoxy(): boolean {
-    return false;
-  }
-
   drop() {
     this.falling = new Falling();
   }
 
   rest() {
     this.falling = new Resting();
+  }
+
+  canFall() {
+    return true;
   }
 }
 
@@ -322,20 +325,16 @@ class Box implements Tile {
     this.falling.moveHorizontal(this, dx);
   }
 
-  isStony(): boolean {
-    return false;
-  }
-
-  isBoxy(): boolean {
-    return true;
-  }
-
   drop() {
     this.falling = new Falling();
   }
 
   rest() {
     this.falling = new Resting();
+  }
+
+  canFall() {
+    return true;
   }
 }
 
@@ -372,17 +371,13 @@ class Key1 implements Tile {
     moveToTile(playerx + dx, playery);
   }
 
-  isStony(): boolean {
-    return false;
-  }
-
-  isBoxy(): boolean {
-    return false;
-  }
-
   drop() { }
 
   rest() { }
+
+  canFall() {
+    return false;
+  }
 }
 
 class Key2 implements Tile {
@@ -418,17 +413,13 @@ class Key2 implements Tile {
     moveToTile(playerx + dx, playery);
   }
 
-  isStony(): boolean {
-    return false;
-  }
-
-  isBoxy(): boolean {
-    return false;
-  }
-
   drop() { }
 
   rest() { }
+
+  canFall() {
+    return false;
+  }
 }
 
 class Lock1 implements Tile {
@@ -463,17 +454,13 @@ class Lock1 implements Tile {
 
   moveHorizontal(dx: number): void { }
 
-  isStony(): boolean {
-    return false;
-  }
-
-  isBoxy(): boolean {
-    return false;
-  }
-
   drop() { }
 
   rest() { }
+
+  canFall() {
+    return false;
+  }
 }
 
 class Lock2 implements Tile {
@@ -506,17 +493,13 @@ class Lock2 implements Tile {
 
   moveHorizontal(dx: number): void { }
 
-  isStony(): boolean {
-    return false;
-  }
-
-  isBoxy(): boolean {
-    return false;
-  }
-
   drop() { }
 
   rest() { }
+
+  canFall() {
+    return false;
+  }
 }
 
 enum RawInput {
@@ -666,10 +649,7 @@ function moveVertical(dy: number) {
 }
 
 function updateTile(y: number, x: number) {
-  if ((map[y][x].isStony()
-      && map[y + 1][x].isAir())
-      || (map[y][x].isBoxy()
-      && map[y + 1][x].isAir())) {
+  if (map[y][x].canFall() && map[y + 1][x].isAir()) {
     map[y][x].drop();
     map[y + 1][x] = map[y][x];
     map[y][x] = new Air();
