@@ -192,8 +192,38 @@ class Resting implements FallingState {
   }
 }
 
-class Stone implements Tile {
+class FallStrategy {
   constructor(private falling: FallingState) { }
+
+  getFalling() {
+    return this.falling;
+  }
+
+  isFalling() {
+    return this.falling;
+  }
+
+  update(tile: Tile, x: number, y: number): void {
+    this.falling = map[y + 1][x].isAir()
+      ? new Falling()
+      : new Resting();
+    this.drop(y, x, tile);
+  }
+
+  private drop(y: number, x: number, tile: Tile) {
+    if (this.falling.isFalling()) {
+      map[y + 1][x] = tile;
+      map[y][x] = new Air();
+    }
+  }
+}
+
+class Stone implements Tile {
+  private fallStrategy: FallStrategy;
+
+  constructor(falling: FallingState) {
+    this.fallStrategy = new FallStrategy(falling);
+  }
 
   isFlux(): boolean { return false; }
 
@@ -205,7 +235,7 @@ class Stone implements Tile {
 
   isStone(): boolean { return true; }
 
-  isFalling(): boolean { return this.falling.isFalling(); }
+  isFalling(): boolean { return this.isFalling(); }
 
   isBox(): boolean { return false; }
 
@@ -225,22 +255,22 @@ class Stone implements Tile {
   }
 
   moveHorizontal(dx: number): void {
-    this.falling.moveHorizontal(this, dx);
+    this.fallStrategy
+      .getFalling()
+      .moveHorizontal(this, dx);
   }
 
   update(x: number, y: number): void {
-    if (map[y + 1][x].isAir()) {
-      this.falling = new Falling();
-      map[y + 1][x] = this;
-      map[y][x] = new Air();
-    } else if (map[y][x].isFalling()) {
-      this.falling = new Resting();
-    }
+    this.fallStrategy.update(this, x, y);
   }
 }
 
 class Box implements Tile {
-  constructor(private falling: FallingState) { }
+  private fallStrategy: FallStrategy;
+
+  constructor(falling: FallingState) {
+    this.fallStrategy = new FallStrategy(falling);
+  }
 
   isFlux(): boolean { return false; }
 
@@ -252,7 +282,7 @@ class Box implements Tile {
 
   isStone(): boolean { return false; }
 
-  isFalling(): boolean { return this.falling.isFalling(); }
+  isFalling(): boolean { return this.isFalling(); }
 
   isBox(): boolean { return true; }
 
@@ -270,17 +300,13 @@ class Box implements Tile {
   }
 
   moveHorizontal(dx: number): void {
-    this.falling.moveHorizontal(this, dx);
+    this.fallStrategy
+      .getFalling()
+      .moveHorizontal(this, dx);
   }
 
   update(x: number, y: number): void {
-    if (map[y + 1][x].isAir()) {
-      this.falling = new Falling();
-      map[y + 1][x] = this;
-      map[y][x] = new Air();
-    } else if (map[y][x].isFalling()) {
-      this.falling = new Resting();
-    }
+    this.fallStrategy.update(this, x, y);
   }
 }
 
