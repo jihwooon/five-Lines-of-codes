@@ -355,16 +355,8 @@ interface Input {
 }
 
 class Right implements Input {
-  isRight() { return true; }
-
-  isLeft() { return false; }
-
-  isUp() { return false; }
-
-  isDown() { return false; }
-
   handle() {
-    moveVertical(1);
+    moveHorizontal(1);
   }
 }
 
@@ -401,7 +393,6 @@ const assertExhausted = (x: never): never => {
 };
 
 const YELLOW_KEY = new KeyConfiguration('#ffcc00', true, new RemoveLock1());
-const BLUE_KEY = new KeyConfiguration('#00ccff', true, new RemoveLock2());
 
 let map: Tile[][];
 const transformTile = (tile: RawTile) => {
@@ -416,8 +407,8 @@ const transformTile = (tile: RawTile) => {
   case RawTile.FLUX: return new Flux();
   case RawTile.KEY1: return new Key(YELLOW_KEY);
   case RawTile.LOCK1: return new Lock1(YELLOW_KEY);
-  case RawTile.KEY2: return new Key(BLUE_KEY);
-  case RawTile.LOCK2: return new Lock1(BLUE_KEY);
+  case RawTile.KEY2: return new Key(YELLOW_KEY);
+  case RawTile.LOCK2: return new Lock1(YELLOW_KEY);
   default: assertExhausted(tile);
   }
 };
@@ -445,8 +436,8 @@ function remove(shouldRemove: RemoveStrategy) {
 }
 
 function moveToTile(newx: number, newy: number) {
-  map[playery][playerx].isAir();
-  map[newy][newx].isPlayer();
+  map[playery][playerx] = new Air();
+  map[newy][newx] = new Play();
   playerx = newx;
   playery = newy;
 }
