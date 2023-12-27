@@ -14,13 +14,6 @@ class Car {
   }
 }
 
-// interface TrafficLight {
-//   isRed(): boolean;
-//   isYellow(): boolean;
-//   isGreen(): boolean;
-//   updateCar(): boolean;
-// }
-
 interface TrafficLight {
   updateCar(): boolean;
 }
