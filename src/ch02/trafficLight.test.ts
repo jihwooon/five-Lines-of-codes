@@ -1,25 +1,9 @@
-import { TrafficLight } from './TrafficLight.enum';
+import { TrafficLight, Red, Yellow, Green } from './TrafficLight.enum';
 
-class Car {
-  stop(): boolean {
-    return false;
-  }
-
-  drive(): boolean {
-    return true;
-  }
-}
-
-const CYCLE = [TrafficLight.RED, TrafficLight.YELLOW, TrafficLight.GREEN];
-
+const CYCLE = [new Red(), new Green(), new Yellow()];
 const updateCarForLight = (current: TrafficLight) => {
-  const car = new Car();
-
-  if (current === TrafficLight.RED) {
-    return car.stop();
-  }
-  return car.drive();
-};
+  return current.updateCar();
+}
 
 describe('trafficLight', () => {
   context('updateCarForLight에 RED가 주어지면', () => {
