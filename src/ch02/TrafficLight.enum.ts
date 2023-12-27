@@ -14,9 +14,7 @@ class Car {
   }
 const car = new Car();
 export interface TrafficLight{
-    isRed() : boolean,
-    isYellow() : boolean,
-    isGreen() : boolean,
+export interface TrafficLight {
     updateCar() : boolean
 }
 
