@@ -1,14 +1,26 @@
-let counter = 0;
+class Counter {
+  private counter: number = 0;
 
-const incrementCounter = () => {
-  counter++;
+  getCount() {
+    return this.counter;
+  }
+
+  setCount(counter: number) {
+    this.counter = counter;
+  }
+}
+
+const counter = new Counter();
+
+const incrementCounter = (counter: Counter) => {
+  counter.setCount(counter.getCount() + 1);
 };
 
 const main = () => {
   for (let i = 0; i < 20; i++) {
-    incrementCounter();
+    incrementCounter(counter);
 
-    return counter;
+    return counter.getCount();
   }
 };
 
