@@ -263,16 +263,20 @@ class KeyConfiguration {
     private removeStrategy: RemoveStrategy,
   ) { }
 
-  getColor() {
-    return this.color;
+  setColor(g: CanvasRenderingContext2D) {
+    g.fillStyle = this.color;
   }
 
   isLock() {
     return this.lock1;
   }
 
-  getRemoveStrategy() {
-    return this.removeStrategy;
+  removeLock() {
+    remove(this.removeStrategy);
+  }
+
+  setFillRect(g: CanvasRenderingContext2D, x: number, y: number) {
+    return g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
   }
 }
 
@@ -304,19 +308,19 @@ class Key implements Tile {
   isLock2(): boolean { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number) {
-    g.fillStyle = this.keyConf.getColor();
-    g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    this.keyConf.setColor(g);
+    this.keyConf.setFillRect(g, x, y);
   }
 
   moveHorizontal(dx: number): void {
-    remove(this.keyConf.getRemoveStrategy());
+    this.keyConf.removeLock();
     moveToTile(playerx + dx, playery);
   }
 
   update(x: number, y: number): void { }
 
   moveVertical(dy: number): void {
-    remove(this.keyConf.getRemoveStrategy());
+    this.keyConf.removeLock();
     moveToTile(playerx, playery + dy);
   }
 }
@@ -335,8 +339,8 @@ class Lock1 implements Tile {
   isLock2(): boolean { return !this.keyConf.isLock(); }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number) {
-    g.fillStyle = '#ffcc00';
-    g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    this.keyConf.setColor(g);
+    this.keyConf.setFillRect(g, x, y);
   }
 
   moveHorizontal(dx: number): void { }
