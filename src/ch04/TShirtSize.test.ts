@@ -1,7 +1,16 @@
-enum TShirtSize {
-  SMALL,
-  MEDIUM,
-  LARGE,
+interface SizeValue { }
+class SmallValue implements SizeValue { }
+class MediumValue implements SizeValue { }
+class LargeValue implements SizeValue { }
+
+class TShirtSize {
+  static readonly SMALL = new TShirtSize(new SmallValue());
+
+  static readonly MEDIUM = new TShirtSize(new MediumValue());
+
+  static readonly LARGE = new TShirtSize(new LargeValue());
+
+  private constructor(private value: SizeValue) { }
 }
 
 const sizeToString = (s: TShirtSize) => {
