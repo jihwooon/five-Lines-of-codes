@@ -1,5 +1,3 @@
-import { TrafficLight } from './TrafficLight.enum';
-
 class Car {
   stop(): boolean {
     return false;
@@ -10,28 +8,42 @@ class Car {
   }
 }
 
-const CYCLE = [TrafficLight.RED, TrafficLight.YELLOW, TrafficLight.GREEN];
+const car = new Car();
+interface TrafficLight {
+  updateCar(): boolean;
+}
 
-const updateCarForLight = (current: TrafficLight) => {
-  const car = new Car();
-
-  if (current === TrafficLight.RED) {
+class Red {
+  updateCar(): boolean {
     return car.stop();
   }
-  return car.drive();
-};
+}
+
+class Green {
+  updateCar(): boolean {
+    return car.drive();
+  }
+}
+
+class Yellow {
+  updateCar(): boolean {
+    return car.drive();
+  }
+}
+
+const updateCar = (current: TrafficLight) => current.updateCar();
 
 describe('trafficLight', () => {
   context('updateCarForLight에 RED가 주어지면', () => {
     it('false를 리턴해야 한다.', () => {
-      expect(updateCarForLight(CYCLE[0])).toBe(false);
+      expect(updateCar(new Red())).toBe(false);
     });
   });
 
   context('updateCarForLight에 YELLOW or GREEN가 주어지면', () => {
     it('true를 리턴해야 한다.', () => {
-      expect(updateCarForLight(CYCLE[1])).toBe(true);
-      expect(updateCarForLight(CYCLE[2])).toBe(true);
+      expect(updateCar(new Yellow())).toBe(true);
+      expect(updateCar(new Green())).toBe(true);
     });
   });
 });

@@ -1,29 +1,28 @@
 import db from '../database';
 
-const deposit = (to: string, amount: number) => {
-  const { id } = db.account.find((v) => v.owner === to);
-  const accountId = db.account[id - 1];
+class Transfer {
+  constructor(from: string, private amount: number) {
+    this.depositHelper(from, -this.amount);
+  }
 
-  return accountId.amount + amount;
-};
+  private depositHelper(to: string, amount: number) {
+    const { id } = db.account.find((v) => v.owner === to);
+    const accountId = db.account[id - 1];
 
-const transfer = (from: string, to: string, amount: number) => {
-  const fromAccount = deposit(from, -amount);
-  const toAccount = deposit(to, amount);
+    return accountId.amount + amount;
+  }
 
-  return `${from}님 잔액은 ${fromAccount}이고 ${to}님 잔액은 ${toAccount} 입니다.`;
-};
+  deposit(to: string) {
+    return this.depositHelper(to, this.amount);
+  }
+}
 
 describe('account', () => {
-  context('보내는 사람과 입금 금액을 입력하면', () => {
-    it('계좌 총합 금액을 반환해야 합니다.', () => {
-      expect(deposit('홍길동', 5000)).toBe(20000);
-    });
-  });
-
   context('보내는 사람과 받은 사람, 송금 금액을 입력하면', () => {
     it('보낸 사람 잔액과 받은 사람 잔액을 출력해야 한다.', () => {
-      expect(transfer('김하준', '홍길동', 5000)).toBe('김하준님 잔액은 5000이고 홍길동님 잔액은 20000 입니다.');
+      const account = new Transfer('김하준', 5000);
+
+      expect(account.deposit('홍길동')).toBe(20000);
     });
   });
 });
