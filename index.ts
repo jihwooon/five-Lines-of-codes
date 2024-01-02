@@ -215,10 +215,21 @@ function remove(shouldRemove: RemoveStrategy) {
   }
 }
 
-class Key implements Tile {
+class KeyConfiguration {
   constructor(
     private color: string,
+    private _1: boolean,
     private removeStrategy: RemoveStrategy
+  ) { }
+  
+  getColor() { return this.color }
+  is1() { return this._1 }
+  getRemoveStrategy() { return this.removeStrategy };
+}
+
+class Key implements Tile {
+  constructor(
+    private keyConf: KeyConfiguration
   ) { }
 
   isAir() { return false; }
@@ -227,15 +238,15 @@ class Key implements Tile {
   isKey2() { return false; }
   isLock2() { return false; }
   draw(g: CanvasRenderingContext2D, x: number, y: number) { 
-    g.fillStyle = this.color;
+    g.fillStyle = this.keyConf.getColor();
     g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE); 
   }
   moveHorizontal(dx: number) {
-    remove(this.removeStrategy);
+    remove(this.keyConf.getRemoveStrategy());
     moveToTile(playerx + dx, playery);
   }
   moveVertical(dy: number) { 
-    remove(this.removeStrategy);
+    remove(this.keyConf.getRemoveStrategy());
     moveToTile(playerx, playery + dy); 
   }
   update(x: number, y: number) { }
@@ -243,24 +254,25 @@ class Key implements Tile {
 
 class Locker implements Tile {
   constructor(
-    private color: string,
-    private lock1: boolean,
-    private lock2: boolean
+    private keyConf: KeyConfiguration
   ) { }
 
   isAir() { return false; }
   isKey1() { return false; }
-  isLock1() { return this.lock1 }
+  isLock1() { return this.keyConf.is1() }
   isKey2() { return false; }
-  isLock2() { return this.lock2; }
+  isLock2() { return !this.keyConf.is1() }
   draw(g: CanvasRenderingContext2D, x: number, y: number) { 
-    g.fillStyle = this.color
+    g.fillStyle = this.keyConf.getColor();
     g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
   }
   moveHorizontal(dx: number) { }
   moveVertical(dy: number) { }
   update(x: number, y: number) { }
 }
+
+const YELLOW_KEY = new KeyConfiguration("#ffcc00", true, new RemoveLock1());
+const LIGHTGREEN_KEY = new KeyConfiguration("#ccffcc", false, new RemoveLock2());
 
 // Input Enum & Interface & Class
 enum RawInput {
@@ -323,10 +335,10 @@ function transformTile(tile: RawTile) {
       case RawTile.FALLING_BOX: return new Stone(new Falling);
       case RawTile.FALLING_STONE: return new Stone(new Falling);
       case RawTile.FLUX: return new Flux();
-      case RawTile.KEY1: return new Key('#ffcc00', new RemoveLock1());
-      case RawTile.KEY2: return new Key('#00ccff', new RemoveLock2());
-      case RawTile.LOCK1: return new Locker('#ffcc00', true, false);
-      case RawTile.LOCK2: return new Locker('#00ccff', false, true);
+      case RawTile.KEY1: return new Key(YELLOW_KEY);
+      case RawTile.KEY2: return new Key(LIGHTGREEN_KEY);
+      case RawTile.LOCK1: return new Locker(YELLOW_KEY);
+      case RawTile.LOCK2: return new Locker(LIGHTGREEN_KEY);
       case RawTile.PLAYER: return new Player();
       case RawTile.STONE: return new Stone(new Resting);
       case RawTile.UNBREAKABLE: return new Unbreakable();
