@@ -1,5 +1,12 @@
+const calculate = (a: number, b: number) => {
+  return a + b;
+}
+
 describe('sum', () => {
-  it('두 수가 주어지면 합의 결괏값을 리턴해야 한다.', () => {
-    expect(1 + 2).toBe(3);
+  context("두 수가 주어지면", () => {
+    it('합한 값을 리턴해야 한다.', () => {
+      expect(calculate(1, 2)).toBe(3);
+      expect(calculate(-3, 5)).toBe(2);
+    });
   });
 });
